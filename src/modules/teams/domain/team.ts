@@ -6,7 +6,7 @@ import { UniqueEntityID } from '../../../shared/domain/UniqueEntityID'
 import { Result } from '../../../shared/core/Result'
 import { Guard } from '../../../shared/core/Guard'
 import { AggregateRoot } from '../../../shared/domain/AggregateRoot'
-import { OrganizationId } from './organizationId'
+import { OrganizationId } from '../../organizations/domain/organizationId'
 
 interface TeamProps {
   name: TeamName
