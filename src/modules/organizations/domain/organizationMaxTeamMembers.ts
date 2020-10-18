@@ -41,4 +41,8 @@ export class OrganizationMaxTeamMembers extends ValueObject<
       new OrganizationMaxTeamMembers(props),
     )
   }
+
+  public static createDefault(): OrganizationMaxTeamMembers {
+    return this.create({ value: 4 }).getValue()
+  }
 }

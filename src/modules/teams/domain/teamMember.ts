@@ -33,11 +33,7 @@ export class TeamMember extends Entity<TeamMemberProps> {
     if (!nullGuard.succeeded) {
       return Result.fail<TeamMember>(nullGuard.message as any)
     } else {
-      const roles = props.roles
-        ? props.roles
-        : TeamMemberRoles.create([
-            TeamMemberRole.create({ value: 'agent' }).getValue(),
-          ])
+      const roles = props.roles ? props.roles : TeamMemberRoles.createDefault()
 
       const defaultTeamMemberProps: TeamMemberProps = {
         ...props,

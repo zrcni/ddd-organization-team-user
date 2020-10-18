@@ -21,6 +21,11 @@ export class MongooseTeamRepo implements ITeamRepo {
     return TeamMap.toDomain(team)
   }
 
+  async getTeamsByOrganizationId(organizationId: string): Promise<Team[]> {
+    const teams = await this.model.find({ organizationId: new ObjectId(organizationId) }).exec()
+    return teams.map(team => TeamMap.toDomain(team))
+  }
+
   async save(team: Team): Promise<void> {
     const exists = await this.exists(team.id.toString())
 

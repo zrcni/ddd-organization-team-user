@@ -35,4 +35,8 @@ export class OrganizationMaxTeams extends ValueObject<
 
     return Result.ok<OrganizationMaxTeams>(new OrganizationMaxTeams(props))
   }
+
+  public static createDefault(): OrganizationMaxTeams {
+    return this.create({ value: 2 }).getValue()
+  }
 }

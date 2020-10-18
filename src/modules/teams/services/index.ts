@@ -1,5 +1,7 @@
-import { TeamMemberService } from './teamMemberService'
+import { AddTeamMemberService } from './addTeamMemberService'
+import { CreateTeamService } from './createTeamService'
 
-const teamMemberService = new TeamMemberService()
+const addTeamMemberService = new AddTeamMemberService()
+const createTeamService = new CreateTeamService()
 
-export { teamMemberService }
+export { addTeamMemberService, createTeamService }

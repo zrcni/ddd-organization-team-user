@@ -9,6 +9,7 @@ import { OrganizationMembers } from '../domain/organizationMembers'
 import { OrganizationMaxTeamMembers } from '../domain/organizationMaxTeamMembers'
 import { OrganizationMaxTeams } from '../domain/organizationMaxTeams'
 import { OrganizationTeamMembersCount } from '../domain/organizationTeamMembersCount'
+import { OrganizationTeamsCount } from '../domain/organizationTeamsCount'
 const ObjectId = mongoose.Types.ObjectId
 
 export class OrganizationMap implements Mapper<Organization> {
@@ -23,9 +24,10 @@ export class OrganizationMap implements Mapper<Organization> {
       organizationId: organization.id.toString(),
       name: organization.name.value,
       members: organizationMembers,
+      maxTeams: organization.maxTeams.value,
+      teamsCount: organization.teamsCount.value,
       maxTeamMembers: organization.maxTeamMembers.value,
       teamMembersCount: organization.teamMembersCount.value,
-      maxTeams: organization.maxTeams.value,
       isDeleted: organization.isDeleted,
     }
   }
@@ -53,12 +55,17 @@ export class OrganizationMap implements Mapper<Organization> {
       value: raw.maxTeams,
     }).getValue()
 
+    const teamsCount = OrganizationTeamsCount.create({
+      value: raw.teamsCount,
+    }).getValue()
+
     const organizationOrError = Organization.create(
       {
         name: organizationNameOrError.getValue(),
+        maxTeams,
+        teamsCount,
         maxTeamMembers,
         teamMembersCount,
-        maxTeams,
         members: organizationMembers,
         isDeleted: raw.isDeleted,
       },
@@ -82,9 +89,10 @@ export class OrganizationMap implements Mapper<Organization> {
     return {
       _id: new ObjectId(organization.id.toString()),
       name: organization.name.value,
+      maxTeams: organization.maxTeams.value,
+      teamsCount: organization.teamsCount.value,
       maxTeamMembers: organization.maxTeamMembers.value,
       teamMembersCount: organization.teamMembersCount.value,
-      maxTeams: organization.maxTeams.value,
       members: organizationMembers,
       isDeleted: organization.isDeleted,
     }

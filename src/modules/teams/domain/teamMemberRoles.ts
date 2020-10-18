@@ -14,4 +14,9 @@ export class TeamMemberRoles extends WatchedList<TeamMemberRole> {
   public static create(roles?: TeamMemberRole[]): TeamMemberRoles {
     return new TeamMemberRoles(roles ? roles : [])
   }
+
+  public static createDefault(): TeamMemberRoles {
+    const defaultRoles = [TeamMemberRole.create({ value: 'agent' }).getValue()]
+    return TeamMemberRoles.create(defaultRoles)
+  }
 }

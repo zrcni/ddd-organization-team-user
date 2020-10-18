@@ -11,26 +11,25 @@ import { IOrganizationRepo } from '../../../organizations/repos/organizationRepo
 import { Team } from '../../domain/team'
 import { Organization } from '../../../organizations/domain/organization'
 import { TeamMemberRoles } from '../../domain/teamMemberRoles'
-import { TeamMemberRole } from '../../domain/teamMemberRole'
-import { TeamMemberService } from '../../services/teamMemberService'
+import { AddTeamMemberService } from '../../services/addTeamMemberService'
 
 export class AddTeamMember
   implements UseCase<AddTeamMemberDTO, Promise<AddTeamMemberResponse>> {
   private userRepo: IUserRepo
   private teamRepo: ITeamRepo
   private organizationRepo: IOrganizationRepo
-  private teamMemberService: TeamMemberService
+  private addTeamMemberService: AddTeamMemberService
 
   constructor(
     userRepo: IUserRepo,
     teamRepo: ITeamRepo,
     organizationRepo: IOrganizationRepo,
-    teamMemberService: TeamMemberService,
+    addTeamMemberService: AddTeamMemberService,
   ) {
     this.userRepo = userRepo
     this.teamRepo = teamRepo
     this.organizationRepo = organizationRepo
-    this.teamMemberService = teamMemberService
+    this.addTeamMemberService = addTeamMemberService
   }
 
   public async execute(req: AddTeamMemberDTO): Promise<AddTeamMemberResponse> {
@@ -59,15 +58,11 @@ export class AddTeamMember
         return left(new AddTeamMemberErrors.OrganizationNotFoundError())
       }
 
-      const teamMemberRoles = TeamMemberRoles.create([
-        TeamMemberRole.create({ value: 'agent' }).getValue(),
-      ])
-
-      const addTeamMemberResult = this.teamMemberService.addTeamMember(
+      const addTeamMemberResult = this.addTeamMemberService.addTeamMember(
         organization,
         team,
         user,
-        teamMemberRoles,
+        TeamMemberRoles.createDefault(),
       )
 
       if (addTeamMemberResult.isLeft()) {

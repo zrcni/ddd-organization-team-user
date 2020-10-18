@@ -3,13 +3,13 @@ import { AddTeamMemberController } from './AddTeamMemberController'
 import { userRepo } from '../../../users/repos'
 import { teamRepo } from '../../repos'
 import { organizationRepo } from '../../../organizations/repos'
-import { teamMemberService } from '../../services'
+import { addTeamMemberService } from '../../services'
 
 const addTeamMemberUseCase = new AddTeamMember(
   userRepo,
   teamRepo,
   organizationRepo,
-  teamMemberService,
+  addTeamMemberService,
 )
 const addTeamMemberController = new AddTeamMemberController(
   addTeamMemberUseCase,

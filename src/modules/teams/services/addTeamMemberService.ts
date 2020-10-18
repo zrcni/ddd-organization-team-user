@@ -9,7 +9,7 @@ import { Guard } from '../../../shared/core/Guard'
 import { TeamMember } from '../domain/teamMember'
 import { OrganizationTeamMembersCount } from '../../organizations/domain/organizationTeamMembersCount'
 
-export class TeamMemberService {
+export class AddTeamMemberService {
   public addTeamMember(
     organization: Organization,
     team: Team,
@@ -37,16 +37,10 @@ export class TeamMemberService {
       )
     }
 
-    const teamMemberOrError = TeamMember.create({
+    const teamMember = TeamMember.create({
       userId: user.userId,
       roles,
-    })
-
-    if (teamMemberOrError.isFailure) {
-      return left(teamMemberOrError)
-    }
-
-    const teamMember = teamMemberOrError.getValue()
+    }).getValue()
 
     if (team.members.exists(teamMember)) {
       return left(new AddTeamMemberErrors.TeamMemberAlreadyExistsError())
@@ -60,6 +54,6 @@ export class TeamMemberService {
 
     organization.updateTeamMembersCount(updatedTeamMembersCount)
 
-    return right(Result.ok<TeamMember>(teamMember))
+    return right(Result.ok(teamMember))
   }
 }
