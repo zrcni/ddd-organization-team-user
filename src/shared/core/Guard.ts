@@ -31,6 +31,18 @@ export class Guard {
         }
   }
 
+  public static lessThan(
+    maxValue: number,
+    actualValue: number,
+  ): IGuardResult {
+    return actualValue < maxValue
+      ? { succeeded: true }
+      : {
+          succeeded: false,
+          message: `Number given {${actualValue}} is not less than {${maxValue}}`,
+        }
+  }
+
   public static againstAtLeast(numChars: number, text: string): IGuardResult {
     return text.length >= numChars
       ? { succeeded: true }

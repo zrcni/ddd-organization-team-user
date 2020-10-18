@@ -3,29 +3,17 @@ import { Result } from '../../../shared/core/Result'
 import { UniqueEntityID } from '../../../shared/domain/UniqueEntityID'
 import { Guard } from '../../../shared/core/Guard'
 import { UserId } from '../../users/domain/userId'
-import { TeamId } from './teamId'
-import { TeamMemberId } from './teamMemberId'
 import { TeamMemberRoles } from './teamMemberRoles'
 import { TeamMemberRole } from './teamMemberRole'
 
 export interface TeamMemberProps {
-  teamMemberId: TeamMemberId
   userId: UserId
-  teamId: TeamId
   roles: TeamMemberRoles
 }
 
 export class TeamMember extends Entity<TeamMemberProps> {
-  get teamMemberId(): UserId {
-    return TeamMemberId.create(this._id).getValue()
-  }
-
-  get userId(): TeamId {
-    return this.props.teamId
-  }
-
-  get teamId(): TeamId {
-    return this.props.teamId
+  get userId(): UserId {
+    return this.props.userId
   }
 
   get roles(): TeamMemberRoles {
@@ -36,14 +24,10 @@ export class TeamMember extends Entity<TeamMemberProps> {
     super(props, id)
   }
 
-  public static create(
-    props: TeamMemberProps,
-    id?: UniqueEntityID,
-  ): Result<TeamMember> {
+  public static create(props: TeamMemberProps): Result<TeamMember> {
     const nullGuard = Guard.againstNullOrUndefinedBulk([
       { argument: props.userId, argumentName: 'userId' },
       { argument: props.roles, argumentName: 'roles' },
-      { argument: props.teamId, argumentName: 'teamId' },
     ])
 
     if (!nullGuard.succeeded) {
@@ -60,7 +44,7 @@ export class TeamMember extends Entity<TeamMemberProps> {
         roles,
       }
 
-      const teamMember = new TeamMember(defaultTeamMemberProps, id)
+      const teamMember = new TeamMember(defaultTeamMemberProps, props.userId.id)
 
       return Result.ok<TeamMember>(teamMember)
     }

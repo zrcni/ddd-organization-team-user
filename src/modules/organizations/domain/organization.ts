@@ -9,7 +9,7 @@ import { AggregateRoot } from '../../../shared/domain/AggregateRoot'
 import { OrganizationMembers } from './organizationMembers'
 import { OrganizationMember } from './organizationMember'
 import { OrganizationMemberAdded } from './events/organizationMemberAdded'
-import { OrganizationMemberRemoved } from './events/teamMemberRemoved'
+import { OrganizationMemberRemoved } from './events/organizationMemberRemoved'
 import { OrganizationMaxTeams } from './organizationMaxTeams'
 import { OrganizationMaxTeamMembers } from './organizationMaxTeamMembers'
 
