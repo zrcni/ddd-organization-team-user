@@ -61,6 +61,12 @@ export class CreateTeamUseCase
         return left(teamNameOrError)
       }
 
+      const alreadyCreatedTeamByTeamName = await this.teamRepo.exists(req.name)
+      const teamNameTaken = !!alreadyCreatedTeamByTeamName
+      if (teamNameTaken) {
+        return left(new CreateTeamErrors.TeamNameTaken(req.name))
+      }
+
       const teamName = teamNameOrError.getValue()
       const teamOrError = this.createTeamService.createTeam(
         organization,

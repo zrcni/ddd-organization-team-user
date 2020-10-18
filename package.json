@@ -17,7 +17,10 @@
     "prettier-watch:darwin:linux": "onchange 'src/**/*.ts' -- prettier --write {{changed}}",
     "prettier-watch:default": "onchange 'src/**/*.ts' -- prettier --write {{changed}}",
     "test": "jest",
-    "test:dev": "jest --watchAll"
+    "test:dev": "jest --watchAll",
+    "db:generate": "ts-node ./scripts/db/generate.ts",
+    "db:create": "ts-node ./scripts/db/create.ts",
+    "db:delete": "ts-node ./scripts/db/delete.ts"
   },
   "husky": {
     "hooks": {}

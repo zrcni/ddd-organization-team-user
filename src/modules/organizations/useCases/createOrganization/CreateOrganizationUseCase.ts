@@ -65,6 +65,16 @@ export class CreateOrganizationUseCase
         return left(organizationNameOrError)
       }
 
+      const alreadyCreatedOrganizationByOrganizationName = await this.organizationRepo.exists(
+        req.name,
+      )
+      const organizationNameTaken = !!alreadyCreatedOrganizationByOrganizationName
+      if (organizationNameTaken) {
+        return left(
+          new CreateOrganizationErrors.OrganizationNameTaken(req.name),
+        )
+      }
+
       const organizationName = organizationNameOrError.getValue()
 
       const organizationOrError = this.createOrganizationService.createOrganization(

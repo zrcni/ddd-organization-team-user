@@ -7,4 +7,10 @@ export namespace CreateOrganizationErrors {
       super(false, `User not found.`)
     }
   }
+
+  export class OrganizationNameTaken extends Result<UseCaseError> {
+    constructor(organizationName: string) {
+      super(false, `Organization name ${organizationName} is already taken.`)
+    }
+  }
 }

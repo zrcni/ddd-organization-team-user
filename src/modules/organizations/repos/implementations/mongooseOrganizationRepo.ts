@@ -11,8 +11,8 @@ export class MongooseOrganizationRepo implements IOrganizationRepo {
     this.model = model
   }
 
-  async exists(organizationId: string): Promise<boolean> {
-    return this.model.exists({ _id: new ObjectId(organizationId) })
+  async exists(name: string): Promise<boolean> {
+    return this.model.exists({ name })
   }
 
   async getOrganizationByOrganizationId(

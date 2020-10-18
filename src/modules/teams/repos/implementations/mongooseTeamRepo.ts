@@ -11,8 +11,8 @@ export class MongooseTeamRepo implements ITeamRepo {
     this.model = model
   }
 
-  async exists(teamId: string): Promise<boolean> {
-    return this.model.exists({ _id: new ObjectId(teamId) })
+  async exists(name: string): Promise<boolean> {
+    return this.model.exists({ name })
   }
 
   async getTeamByTeamId(teamId: string): Promise<Team> {
@@ -22,7 +22,9 @@ export class MongooseTeamRepo implements ITeamRepo {
   }
 
   async getTeamsByOrganizationId(organizationId: string): Promise<Team[]> {
-    const teams = await this.model.find({ organizationId: new ObjectId(organizationId) }).exec()
+    const teams = await this.model
+      .find({ organizationId: new ObjectId(organizationId) })
+      .exec()
     return teams.map(team => TeamMap.toDomain(team))
   }
 

@@ -21,4 +21,10 @@ export namespace CreateTeamErrors {
       super(false, `Organization has reached the maximum team limit.`)
     }
   }
+
+  export class TeamNameTaken extends Result<UseCaseError> {
+    constructor(teamName: string) {
+      super(false, `Team name ${teamName} is already taken.`)
+    }
+  }
 }
