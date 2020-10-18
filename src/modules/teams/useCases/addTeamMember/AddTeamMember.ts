@@ -75,6 +75,7 @@ export class AddTeamMember
       }
 
       await this.teamRepo.save(team)
+      await this.organizationRepo.save(organization)
 
       return right(addTeamMemberResult.value)
     } catch (err) {

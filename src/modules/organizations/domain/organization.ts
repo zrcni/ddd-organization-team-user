@@ -12,12 +12,14 @@ import { OrganizationMemberAdded } from './events/organizationMemberAdded'
 import { OrganizationMemberRemoved } from './events/organizationMemberRemoved'
 import { OrganizationMaxTeams } from './organizationMaxTeams'
 import { OrganizationMaxTeamMembers } from './organizationMaxTeamMembers'
+import { OrganizationTeamMembersCount } from './organizationTeamMembersCount'
 
 interface OrganizationProps {
   name: OrganizationName
   members: OrganizationMembers
   maxTeams: OrganizationMaxTeams
   maxTeamMembers: OrganizationMaxTeamMembers
+  teamMembersCount: OrganizationTeamMembersCount
   isDeleted?: boolean
 }
 
@@ -36,6 +38,10 @@ export class Organization extends AggregateRoot<OrganizationProps> {
 
   get maxTeamMembers(): OrganizationMaxTeamMembers {
     return this.props.maxTeamMembers
+  }
+
+  get teamMembersCount(): OrganizationTeamMembersCount {
+    return this.props.teamMembersCount
   }
 
   get members(): OrganizationMembers {
@@ -69,6 +75,10 @@ export class Organization extends AggregateRoot<OrganizationProps> {
         new OrganizationMemberRemoved(organizationMember, this.organizationId),
       )
     }
+  }
+
+  public updateTeamMembersCount(teamMembersCount: OrganizationTeamMembersCount) {
+    this.props.teamMembersCount = teamMembersCount
   }
 
   private constructor(props: OrganizationProps, id?: UniqueEntityID) {

@@ -1,10 +1,10 @@
-import { Schema } from 'mongoose'
+import { Schema, Model } from 'mongoose'
 import fs from 'fs'
 import path from 'path'
 import config from '../config/config'
 import { addHooks } from '../hooks'
 
-const models: any = {}
+const models: { [key: string]: Model<any> } = {}
 let modelsLoaded = false
 
 function createModels() {
@@ -32,6 +32,6 @@ function createModels() {
   return models
 }
 
-export default createModels()
+createModels()
 
 export { models }

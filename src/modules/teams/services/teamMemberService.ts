@@ -1,12 +1,13 @@
-import { Organization } from "../../organizations/domain/organization"
-import { Team } from "../domain/team"
-import { User } from "../../users/domain/user"
-import { TeamMemberRoles } from "../domain/teamMemberRoles"
-import { AddTeamMemberResponse } from "../useCases/addTeamMember/AddTeamMemberResponse"
-import { AddTeamMemberErrors } from "../useCases/addTeamMember/AddTeamMemberErrors"
-import { left, right, Result } from "../../../shared/core/Result"
-import { Guard } from "../../../shared/core/Guard"
-import { TeamMember } from "../domain/teamMember"
+import { Organization } from '../../organizations/domain/organization'
+import { Team } from '../domain/team'
+import { User } from '../../users/domain/user'
+import { TeamMemberRoles } from '../domain/teamMemberRoles'
+import { AddTeamMemberResponse } from '../useCases/addTeamMember/AddTeamMemberResponse'
+import { AddTeamMemberErrors } from '../useCases/addTeamMember/AddTeamMemberErrors'
+import { left, right, Result } from '../../../shared/core/Result'
+import { Guard } from '../../../shared/core/Guard'
+import { TeamMember } from '../domain/teamMember'
+import { OrganizationTeamMembersCount } from '../../organizations/domain/organizationTeamMembersCount'
 
 export class TeamMemberService {
   public addTeamMember(
@@ -26,7 +27,7 @@ export class TeamMemberService {
 
     const teamMemberLimitResult = Guard.lessThan(
       organization.maxTeamMembers.value,
-      team.members.currentItems.length,
+      organization.teamMembersCount.value,
     )
     if (!teamMemberLimitResult.succeeded) {
       return left(
@@ -38,7 +39,7 @@ export class TeamMemberService {
 
     const teamMemberOrError = TeamMember.create({
       userId: user.userId,
-      roles
+      roles,
     })
 
     if (teamMemberOrError.isFailure) {
@@ -52,6 +53,12 @@ export class TeamMemberService {
     }
 
     team.addMember(teamMember)
+
+    const updatedTeamMembersCount = OrganizationTeamMembersCount.create({
+      value: team.members.getItems().length,
+    }).getValue()
+
+    organization.updateTeamMembersCount(updatedTeamMembersCount)
 
     return right(Result.ok<TeamMember>(teamMember))
   }

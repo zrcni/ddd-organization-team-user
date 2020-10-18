@@ -1,6 +1,6 @@
-import models from '../../../shared/infra/database/mongoose/models'
+import { models } from '../../../shared/infra/database/mongoose/models'
 import { MongooseUserRepo } from './implementations/mongooseUserRepo'
 
-const userRepo = new MongooseUserRepo(models)
+const userRepo = new MongooseUserRepo(models.User)
 
 export { userRepo }

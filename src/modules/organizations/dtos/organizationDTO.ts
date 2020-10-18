@@ -6,5 +6,6 @@ export interface OrganizationDTO {
   members: OrganizationMemberDTO[]
   maxTeams: number
   maxTeamMembers: number
+  teamMembersCount: number
   isDeleted?: boolean
 }

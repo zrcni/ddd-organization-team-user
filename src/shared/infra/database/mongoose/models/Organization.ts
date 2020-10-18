@@ -34,5 +34,5 @@ export default (conn: Connection, callback: (schema: Schema) => void) => {
   // Hooks must be added before the model is created.
   if (callback) callback(OrganizationSchema)
 
-  return conn.model('Organization', OrganizationSchema, 'organization')
+  return conn.model('Organization', OrganizationSchema, 'organizations')
 }

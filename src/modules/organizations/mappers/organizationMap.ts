@@ -5,10 +5,10 @@ import { UniqueEntityID } from '../../../shared/domain/UniqueEntityID'
 import mongoose from 'mongoose'
 import { OrganizationMemberMap } from './organizationMemberMap'
 import { OrganizationName } from '../domain/organizationName'
-import { OrganizationId } from '../../organizations/domain/organizationId'
 import { OrganizationMembers } from '../domain/organizationMembers'
 import { OrganizationMaxTeamMembers } from '../domain/organizationMaxTeamMembers'
 import { OrganizationMaxTeams } from '../domain/organizationMaxTeams'
+import { OrganizationTeamMembersCount } from '../domain/organizationTeamMembersCount'
 const ObjectId = mongoose.Types.ObjectId
 
 export class OrganizationMap implements Mapper<Organization> {
@@ -24,6 +24,7 @@ export class OrganizationMap implements Mapper<Organization> {
       name: organization.name.value,
       members: organizationMembers,
       maxTeamMembers: organization.maxTeamMembers.value,
+      teamMembersCount: organization.teamMembersCount.value,
       maxTeams: organization.maxTeams.value,
       isDeleted: organization.isDeleted,
     }
@@ -39,8 +40,13 @@ export class OrganizationMap implements Mapper<Organization> {
           )
         : [],
     )
+
     const maxTeamMembers = OrganizationMaxTeamMembers.create({
       value: raw.maxTeamMembers,
+    }).getValue()
+
+    const teamMembersCount = OrganizationTeamMembersCount.create({
+      value: raw.teamMembersCount,
     }).getValue()
 
     const maxTeams = OrganizationMaxTeams.create({
@@ -51,6 +57,7 @@ export class OrganizationMap implements Mapper<Organization> {
       {
         name: organizationNameOrError.getValue(),
         maxTeamMembers,
+        teamMembersCount,
         maxTeams,
         members: organizationMembers,
         isDeleted: raw.isDeleted,
@@ -76,6 +83,7 @@ export class OrganizationMap implements Mapper<Organization> {
       _id: new ObjectId(organization.id.toString()),
       name: organization.name.value,
       maxTeamMembers: organization.maxTeamMembers.value,
+      teamMembersCount: organization.teamMembersCount.value,
       maxTeams: organization.maxTeams.value,
       members: organizationMembers,
       isDeleted: organization.isDeleted,
