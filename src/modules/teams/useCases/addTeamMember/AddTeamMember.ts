@@ -74,6 +74,8 @@ export class AddTeamMember
         return left(addTeamMemberResult.value)
       }
 
+      await this.teamRepo.save(team)
+
       return right(addTeamMemberResult.value)
     } catch (err) {
       return left(new AppError.UnexpectedError(err))
