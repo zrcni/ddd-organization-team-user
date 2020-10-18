@@ -29,7 +29,7 @@ export class OrganizationTeamsCount extends ValueObject<
       )
     }
 
-    const greaterThanResult = Guard.greaterThan(this.min, props.value)
+    const greaterThanResult = Guard.greaterThanOrEqual(this.min, props.value)
     if (!greaterThanResult.succeeded) {
       return Result.fail<OrganizationTeamsCount>(
         greaterThanResult.message as string,

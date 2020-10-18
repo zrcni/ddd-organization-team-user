@@ -131,7 +131,10 @@ export class Organization extends AggregateRoot<OrganizationProps> {
       id,
     )
 
-    organization.addDomainEvent(new OrganizationCreated(organization))
+    const isNew = !id
+    if (isNew) {
+      organization.addDomainEvent(new OrganizationCreated(organization))
+    }
 
     return Result.ok<Organization>(organization)
   }

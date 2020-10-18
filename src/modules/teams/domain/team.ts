@@ -83,7 +83,10 @@ export class Team extends AggregateRoot<TeamProps> {
       id,
     )
 
-    team.addDomainEvent(new TeamCreated(team))
+    const isNew = !id
+    if (isNew) {
+      team.addDomainEvent(new TeamCreated(team))
+    }
 
     return Result.ok<Team>(team)
   }

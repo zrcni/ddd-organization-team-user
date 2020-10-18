@@ -1,13 +1,13 @@
-import { AddTeamMember } from './AddTeamMember'
+import { AddTeamMemberUseCase } from './AddTeamMemberUseCase'
 import { AddTeamMemberDTO } from './AddTeamMemberDTO'
 import { AddTeamMemberErrors } from './AddTeamMemberErrors'
 import * as express from 'express'
 import { BaseController } from '../../../../shared/infra/http/models/BaseController'
 
 export class AddTeamMemberController extends BaseController {
-  private useCase: AddTeamMember
+  private useCase: AddTeamMemberUseCase
 
-  constructor(useCase: AddTeamMember) {
+  constructor(useCase: AddTeamMemberUseCase) {
     super()
     this.useCase = useCase
   }

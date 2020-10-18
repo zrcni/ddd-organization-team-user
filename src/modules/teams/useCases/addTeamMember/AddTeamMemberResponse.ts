@@ -8,5 +8,5 @@ export type AddTeamMemberResponse = Either<
   | AddTeamMemberErrors.TeamNotInOrganizationError
   | AddTeamMemberErrors.TeamMemberAlreadyExistsError
   | AppError.UnexpectedError,
-  Result<TeamMember>
+  Result<void>
 >

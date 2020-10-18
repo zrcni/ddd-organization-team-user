@@ -4,7 +4,6 @@ import { UniqueEntityID } from '../../../shared/domain/UniqueEntityID'
 import { Guard } from '../../../shared/core/Guard'
 import { UserId } from '../../users/domain/userId'
 import { OrganizationId } from './organizationId'
-import { OrganizationMemberId } from './organizationMemberId'
 import { OrganizationMemberRoles } from './organizationMemberRoles'
 
 export interface OrganizationMemberProps {

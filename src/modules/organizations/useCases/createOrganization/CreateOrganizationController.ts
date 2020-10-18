@@ -1,22 +1,21 @@
-import { CreateTeamUseCase } from './CreateTeamUseCase'
-import { CreateTeamDTO } from './CreateTeamDTO'
-import { CreateTeamErrors } from './CreateTeamErrors'
+import { CreateOrganizationUseCase } from './CreateOrganizationUseCase'
+import { CreateOrganizationDTO } from './CreateOrganizationDTO'
+import { CreateOrganizationErrors } from './CreateOrganizationErrors'
 import * as express from 'express'
 import { BaseController } from '../../../../shared/infra/http/models/BaseController'
 
-export class CreateTeamController extends BaseController {
-  private useCase: CreateTeamUseCase
+export class CreateOrganizationController extends BaseController {
+  private useCase: CreateOrganizationUseCase
 
-  constructor(useCase: CreateTeamUseCase) {
+  constructor(useCase: CreateOrganizationUseCase) {
     super()
     this.useCase = useCase
   }
 
   async executeImpl(req: express.Request, res: express.Response): Promise<any> {
-    const dto: CreateTeamDTO = {
+    const dto: CreateOrganizationDTO = {
       name: req.body.name,
       userId: req.body.userId,
-      organizationId: req.body.organizationId,
     }
 
     try {
@@ -26,8 +25,7 @@ export class CreateTeamController extends BaseController {
         const error = result.value
 
         switch (error.constructor) {
-          case CreateTeamErrors.UserNotFoundError:
-          case CreateTeamErrors.OrganizationNotFoundError:
+          case CreateOrganizationErrors.UserNotFoundError:
             return this.notFound(res, error.errorValue())
           default:
             return this.fail(res, error.errorValue())

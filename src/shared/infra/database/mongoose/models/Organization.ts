@@ -4,7 +4,7 @@ const ObjectId = Schema.Types.ObjectId
 export default (conn: Connection, callback: (schema: Schema) => void) => {
   const OrganizationMemberSchema = new Schema(
     {
-      user: {
+      userId: {
         type: ObjectId,
         required: true,
         ref: 'User',
@@ -23,7 +23,9 @@ export default (conn: Connection, callback: (schema: Schema) => void) => {
     {
       name: String,
       maxTeams: Number,
+      teamsCount: Number,
       maxTeamMembers: Number,
+      teamMembersCount: Number,
       members: [OrganizationMemberSchema],
       isDeleted: Boolean,
     },

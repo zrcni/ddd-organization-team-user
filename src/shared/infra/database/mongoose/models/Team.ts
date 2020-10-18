@@ -4,7 +4,7 @@ const ObjectId = Schema.Types.ObjectId
 export default (conn: Connection, callback: (schema: Schema) => void) => {
   const TeamMemberSchema = new Schema(
     {
-      user: {
+      userId: {
         type: ObjectId,
         required: true,
         ref: 'User',

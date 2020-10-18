@@ -37,8 +37,8 @@ export class OrganizationMap implements Mapper<Organization> {
 
     const organizationMembers = OrganizationMembers.create(
       raw.members
-        ? raw.members.map((organizationMember: any) =>
-            OrganizationMemberMap.toDomain(organizationMember),
+        ? raw.members.map((member: any) =>
+            OrganizationMemberMap.toDomain(member),
           )
         : [],
     )

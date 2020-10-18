@@ -2,12 +2,18 @@ import { Organization } from '../../organizations/domain/organization'
 import { Team } from '../domain/team'
 import { User } from '../../users/domain/user'
 import { TeamMemberRoles } from '../domain/teamMemberRoles'
-import { AddTeamMemberResponse } from '../useCases/addTeamMember/AddTeamMemberResponse'
 import { AddTeamMemberErrors } from '../useCases/addTeamMember/AddTeamMemberErrors'
-import { left, right, Result } from '../../../shared/core/Result'
+import { left, right, Result, Either } from '../../../shared/core/Result'
 import { Guard } from '../../../shared/core/Guard'
 import { TeamMember } from '../domain/teamMember'
 import { OrganizationTeamMembersCount } from '../../organizations/domain/organizationTeamMembersCount'
+
+type AddTeamMemberResult = Either<
+  | AddTeamMemberErrors.TeamNotInOrganizationError
+  | AddTeamMemberErrors.OrganizationMaxTeamMembersLimitReachedError
+  | AddTeamMemberErrors.TeamMemberAlreadyExistsError,
+  Result<TeamMember>
+>
 
 export class AddTeamMemberService {
   public addTeamMember(
@@ -15,7 +21,7 @@ export class AddTeamMemberService {
     team: Team,
     user: User,
     roles: TeamMemberRoles,
-  ): AddTeamMemberResponse {
+  ): AddTeamMemberResult {
     if (!organization.id.equals(team.organizationId.id)) {
       return left(
         new AddTeamMemberErrors.TeamNotInOrganizationError(

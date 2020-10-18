@@ -23,7 +23,9 @@ export class MongooseOrganizationRepo implements IOrganizationRepo {
         _id: new ObjectId(organizationId),
       })
       .exec()
-    if (!organization) throw new Error('Organization not found.')
+    if (!organization) {
+      throw new Error('Organization not found.')
+    }
     return OrganizationMap.toDomain(organization)
   }
 

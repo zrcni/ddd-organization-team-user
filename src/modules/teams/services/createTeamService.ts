@@ -1,22 +1,23 @@
 import { Organization } from '../../organizations/domain/organization'
 import { Team } from '../domain/team'
 import { User } from '../../users/domain/user'
-import { TeamMemberRoles } from '../domain/teamMemberRoles'
-import { CreateTeamResponse } from '../useCases/createTeam/CreateTeamResponse'
-import { CreateTeamErrors } from '../useCases/createTeam/CreateTeamErrors'
-import { left, right, Result } from '../../../shared/core/Result'
+import { left, right, Result, Either } from '../../../shared/core/Result'
 import { Guard } from '../../../shared/core/Guard'
 import { TeamMembers } from '../domain/teamMembers'
-import { TeamMember } from '../domain/teamMember'
 import { TeamName } from '../domain/teamName'
 import { OrganizationTeamsCount } from '../../organizations/domain/organizationTeamsCount'
+import { CreateTeamErrors } from '../useCases/createTeam/CreateTeamErrors'
+
+type CreateTeamResult = Either<
+  CreateTeamErrors.OrganizationMaximumTeamsLimitReachedError,
+  Result<Team>
+>
 
 export class CreateTeamService {
   public createTeam(
     organization: Organization,
-    user: User,
     teamName: TeamName,
-  ): CreateTeamResponse {
+  ): CreateTeamResult {
     const maxTeamsResult = Guard.lessThan(
       organization.maxTeams.value,
       organization.teamsCount.value,
@@ -27,20 +28,13 @@ export class CreateTeamService {
       )
     }
 
-    const members = TeamMembers.create([
-      TeamMember.create({
-        userId: user.userId,
-        roles: TeamMemberRoles.createDefault(),
-      }).getValue(),
-    ])
-
     const teamOrError = Team.create({
       name: teamName,
       organizationId: organization.organizationId,
-      members,
+      members: TeamMembers.create([]),
     })
     if (teamOrError.isFailure) {
-      return left(teamOrError.error)
+      return left(teamOrError)
     }
 
     const updatedTeamsCount = OrganizationTeamsCount.create({

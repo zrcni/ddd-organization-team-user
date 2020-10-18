@@ -29,7 +29,7 @@ export class OrganizationTeamMembersCount extends ValueObject<
       )
     }
 
-    const greaterThanResult = Guard.greaterThan(this.min, props.value)
+    const greaterThanResult = Guard.greaterThanOrEqual(this.min, props.value)
     if (!greaterThanResult.succeeded) {
       return Result.fail<OrganizationTeamMembersCount>(
         greaterThanResult.message as string,
@@ -42,6 +42,6 @@ export class OrganizationTeamMembersCount extends ValueObject<
   }
 
   public static createDefault() {
-    return this.create({ value: 0 })
+    return this.create({ value: 0 }).getValue()
   }
 }

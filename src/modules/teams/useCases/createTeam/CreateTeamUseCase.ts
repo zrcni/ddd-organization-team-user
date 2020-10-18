@@ -11,24 +11,30 @@ import { Organization } from '../../../organizations/domain/organization'
 import { TeamName } from '../../domain/teamName'
 import { User } from '../../../users/domain/user'
 import { CreateTeamService } from '../../services/createTeamService'
+import { TeamMemberRoles } from '../../domain/teamMemberRoles'
+import { TeamMemberRole } from '../../domain/teamMemberRole'
+import { AddTeamMemberService } from '../../services/addTeamMemberService'
 
-export class CreateTeam
+export class CreateTeamUseCase
   implements UseCase<CreateTeamDTO, Promise<CreateTeamResponse>> {
   private userRepo: IUserRepo
   private teamRepo: ITeamRepo
   private organizationRepo: IOrganizationRepo
   private createTeamService: CreateTeamService
+  private addTeamMemberService: AddTeamMemberService
 
   constructor(
     userRepo: IUserRepo,
     teamRepo: ITeamRepo,
     organizationRepo: IOrganizationRepo,
     createTeamService: CreateTeamService,
+    addTeamMemberService: AddTeamMemberService,
   ) {
     this.userRepo = userRepo
     this.teamRepo = teamRepo
     this.organizationRepo = organizationRepo
     this.createTeamService = createTeamService
+    this.addTeamMemberService = addTeamMemberService
   }
 
   public async execute(req: CreateTeamDTO): Promise<CreateTeamResponse> {
@@ -50,7 +56,7 @@ export class CreateTeam
         return left(new CreateTeamErrors.OrganizationNotFoundError())
       }
 
-      const teamNameOrError = TeamName.create({ name: req.teamName })
+      const teamNameOrError = TeamName.create({ name: req.name })
       if (teamNameOrError.isFailure) {
         return left(teamNameOrError)
       }
@@ -58,7 +64,6 @@ export class CreateTeam
       const teamName = teamNameOrError.getValue()
       const teamOrError = this.createTeamService.createTeam(
         organization,
-        user,
         teamName,
       )
 
@@ -68,10 +73,26 @@ export class CreateTeam
 
       const team = teamOrError.value.getValue()
 
+      const memberRoles = TeamMemberRoles.create([
+        TeamMemberRole.create({ value: 'agent' }).getValue(),
+        TeamMemberRole.create({ value: 'lead' }).getValue(),
+      ])
+
+      const addTeamMemberResult = this.addTeamMemberService.addTeamMember(
+        organization,
+        team,
+        user,
+        memberRoles,
+      )
+
+      if (addTeamMemberResult.isLeft()) {
+        return left(addTeamMemberResult.value)
+      }
+
       await this.teamRepo.save(team)
       await this.organizationRepo.save(organization)
 
-      return right(Result.ok(team))
+      return right(Result.ok<void>())
     } catch (err) {
       return left(new AppError.UnexpectedError(err))
     }

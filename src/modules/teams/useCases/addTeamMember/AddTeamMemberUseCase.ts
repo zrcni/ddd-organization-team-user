@@ -3,7 +3,7 @@ import { UseCase } from '../../../../shared/core/UseCase'
 import { AddTeamMemberResponse } from './AddTeamMemberResponse'
 import { IUserRepo } from '../../../users/repos/userRepo'
 import { User } from '../../../users/domain/user'
-import { left, right } from '../../../../shared/core/Result'
+import { left, right, Result } from '../../../../shared/core/Result'
 import { AppError } from '../../../../shared/core/AppError'
 import { AddTeamMemberErrors } from './AddTeamMemberErrors'
 import { ITeamRepo } from '../../repos/teamRepo'
@@ -13,7 +13,7 @@ import { Organization } from '../../../organizations/domain/organization'
 import { TeamMemberRoles } from '../../domain/teamMemberRoles'
 import { AddTeamMemberService } from '../../services/addTeamMemberService'
 
-export class AddTeamMember
+export class AddTeamMemberUseCase
   implements UseCase<AddTeamMemberDTO, Promise<AddTeamMemberResponse>> {
   private userRepo: IUserRepo
   private teamRepo: ITeamRepo
@@ -72,7 +72,7 @@ export class AddTeamMember
       await this.teamRepo.save(team)
       await this.organizationRepo.save(organization)
 
-      return right(addTeamMemberResult.value)
+      return right(Result.ok<void>())
     } catch (err) {
       return left(new AppError.UnexpectedError(err))
     }

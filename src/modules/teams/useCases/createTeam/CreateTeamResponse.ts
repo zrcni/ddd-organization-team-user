@@ -6,6 +6,7 @@ import { Team } from '../../domain/team'
 export type CreateTeamResponse = Either<
   | CreateTeamErrors.UserNotFoundError
   | CreateTeamErrors.OrganizationNotFoundError
+  | CreateTeamErrors.OrganizationMaximumTeamsLimitReachedError
   | AppError.UnexpectedError,
-  Result<Team>
+  Result<void>
 >

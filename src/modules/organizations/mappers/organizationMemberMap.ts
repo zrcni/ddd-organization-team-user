@@ -4,6 +4,7 @@ import { OrganizationMemberDTO } from '../dtos/organizationMemberDTO'
 import { OrganizationMemberRoles } from '../domain/organizationMemberRoles'
 import { OrganizationMemberRole } from '../domain/organizationMemberRole'
 import mongoose from 'mongoose'
+import { UserId } from '../../users/domain/userId'
 const ObjectId = mongoose.Types.ObjectId
 
 export class OrganizationMemberMap implements Mapper<OrganizationMember> {
@@ -29,8 +30,9 @@ export class OrganizationMemberMap implements Mapper<OrganizationMember> {
         : [],
     )
 
+    const userId = UserId.create(raw.userId.toString()).getValue()
     const organizationMemberOrError = OrganizationMember.create({
-      userId: raw.userId.toString(),
+      userId,
       roles: organizationMemberRoles,
     })
 

@@ -31,15 +31,33 @@ export class Guard {
         }
   }
 
-  public static lessThan(
-    maxValue: number,
-    actualValue: number,
-  ): IGuardResult {
+  public static greaterThanOrEqual(minValue: number, actualValue: number) {
+    return actualValue >= minValue
+      ? { succeeded: true }
+      : {
+          succeeded: false,
+          message: `Number given {${actualValue}} is not equal or greater than {${minValue}}`,
+        }
+  }
+
+  public static lessThan(maxValue: number, actualValue: number): IGuardResult {
     return actualValue < maxValue
       ? { succeeded: true }
       : {
           succeeded: false,
           message: `Number given {${actualValue}} is not less than {${maxValue}}`,
+        }
+  }
+
+  public static lessThanOrEqual(
+    maxValue: number,
+    actualValue: number,
+  ): IGuardResult {
+    return actualValue <= maxValue
+      ? { succeeded: true }
+      : {
+          succeeded: false,
+          message: `Number given {${actualValue}} is not equal or less than {${maxValue}}`,
         }
   }
 

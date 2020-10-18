@@ -1,6 +1,6 @@
 
 export interface CreateTeamDTO {
-  teamName: string
+  name: string
   organizationId: string;
   userId: string;
 }
