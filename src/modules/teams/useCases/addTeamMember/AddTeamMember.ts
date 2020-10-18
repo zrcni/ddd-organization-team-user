@@ -8,29 +8,29 @@ import { AppError } from '../../../../shared/core/AppError'
 import { AddTeamMemberErrors } from './AddTeamMemberErrors'
 import { ITeamRepo } from '../../repos/teamRepo'
 import { IOrganizationRepo } from '../../../organizations/repos/organizationRepo'
-import { OrganizationService } from '../../../organizations/domain/services/organizationService'
 import { Team } from '../../domain/team'
 import { Organization } from '../../../organizations/domain/organization'
 import { TeamMemberRoles } from '../../domain/teamMemberRoles'
 import { TeamMemberRole } from '../../domain/teamMemberRole'
+import { TeamMemberService } from '../../services/teamMemberService'
 
 export class AddTeamMember
   implements UseCase<AddTeamMemberDTO, Promise<AddTeamMemberResponse>> {
   private userRepo: IUserRepo
   private teamRepo: ITeamRepo
   private organizationRepo: IOrganizationRepo
-  private organizationService: OrganizationService
+  private teamMemberService: TeamMemberService
 
   constructor(
     userRepo: IUserRepo,
     teamRepo: ITeamRepo,
     organizationRepo: IOrganizationRepo,
-    organizationService: OrganizationService,
+    teamMemberService: TeamMemberService,
   ) {
     this.userRepo = userRepo
     this.teamRepo = teamRepo
     this.organizationRepo = organizationRepo
-    this.organizationService = organizationService
+    this.teamMemberService = teamMemberService
   }
 
   public async execute(req: AddTeamMemberDTO): Promise<AddTeamMemberResponse> {
@@ -63,7 +63,7 @@ export class AddTeamMember
         TeamMemberRole.create({ value: 'agent' }).getValue(),
       ])
 
-      const addTeamMemberResult = this.organizationService.addTeamMember(
+      const addTeamMemberResult = this.teamMemberService.addTeamMember(
         organization,
         team,
         user,

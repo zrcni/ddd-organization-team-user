@@ -1,14 +1,14 @@
-import { Result, right, left } from '../../../../shared/core/Result'
-import { Guard } from '../../../../shared/core/Guard'
-import { User } from '../../../users/domain/user'
-import { TeamMemberRoles } from '../../../teams/domain/teamMemberRoles'
-import { Team } from '../../../teams/domain/team'
-import { Organization } from '../organization'
-import { AddTeamMemberResponse } from '../../../teams/useCases/addTeamMember/AddTeamMemberResponse'
-import { AddTeamMemberErrors } from '../../../teams/useCases/addTeamMember/AddTeamMemberErrors'
-import { TeamMember } from '../../../teams/domain/teamMember'
+import { Organization } from "../../organizations/domain/organization"
+import { Team } from "../domain/team"
+import { User } from "../../users/domain/user"
+import { TeamMemberRoles } from "../domain/teamMemberRoles"
+import { AddTeamMemberResponse } from "../useCases/addTeamMember/AddTeamMemberResponse"
+import { AddTeamMemberErrors } from "../useCases/addTeamMember/AddTeamMemberErrors"
+import { left, right, Result } from "../../../shared/core/Result"
+import { Guard } from "../../../shared/core/Guard"
+import { TeamMember } from "../domain/teamMember"
 
-export class OrganizationService {
+export class TeamMemberService {
   public addTeamMember(
     organization: Organization,
     team: Team,
