@@ -9,6 +9,7 @@ import { AggregateRoot } from '../../../shared/domain/AggregateRoot'
 
 interface UserProps {
   username: UserName
+  isAdmin?: boolean
   isDeleted?: boolean
 }
 
@@ -23,6 +24,10 @@ export class User extends AggregateRoot<UserProps> {
 
   get isDeleted(): boolean {
     return this.props.isDeleted as boolean
+  }
+
+  get isAdmin(): boolean {
+    return this.props.isAdmin as boolean
   }
 
   public delete(): void {
@@ -50,6 +55,7 @@ export class User extends AggregateRoot<UserProps> {
       {
         ...props,
         isDeleted: props.isDeleted ? props.isDeleted : false,
+        isAdmin: props.isAdmin ? props.isAdmin : false,
       },
       id,
     )

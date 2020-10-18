@@ -7,10 +7,15 @@ import { Result } from '../../../shared/core/Result'
 import { Guard } from '../../../shared/core/Guard'
 import { AggregateRoot } from '../../../shared/domain/AggregateRoot'
 import { OrganizationId } from '../../organizations/domain/organizationId'
+import { TeamMembers } from './teamMembers'
+import { TeamMember } from './teamMember'
+import { TeamMemberAdded } from './events/teamMemberAdded'
+import { TeamMemberRemoved } from './events/teamMemberRemoved'
 
 interface TeamProps {
   name: TeamName
   organizationId: OrganizationId
+  members: TeamMembers
   isDeleted?: boolean
 }
 
@@ -23,14 +28,36 @@ export class Team extends AggregateRoot<TeamProps> {
     return this.props.name
   }
 
+  get organizationId(): OrganizationId {
+    return this.props.organizationId
+  }
+
+  get members(): TeamMembers {
+    return this.props.members
+  }
+
   get isDeleted(): boolean {
     return this.props.isDeleted as boolean
   }
 
   public delete(): void {
     if (!this.props.isDeleted) {
-      this.addDomainEvent(new TeamDeleted(this))
       this.props.isDeleted = true
+      this.addDomainEvent(new TeamDeleted(this))
+    }
+  }
+
+  public addMember(teamMember: TeamMember): void {
+    if (!this.props.members.exists(teamMember)) {
+      this.props.members.add(teamMember)
+      this.addDomainEvent(new TeamMemberAdded(teamMember, this.teamId))
+    }
+  }
+
+  public removeMember(teamMember: TeamMember): void {
+    if (this.props.members.exists(teamMember)) {
+      this.props.members.remove(teamMember)
+      this.addDomainEvent(new TeamMemberRemoved(teamMember, this.teamId))
     }
   }
 
@@ -50,6 +77,7 @@ export class Team extends AggregateRoot<TeamProps> {
     const team = new Team(
       {
         ...props,
+        members: props.members ? props.members : TeamMembers.create(),
         isDeleted: props.isDeleted ? props.isDeleted : false,
       },
       id,

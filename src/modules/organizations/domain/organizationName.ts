@@ -36,7 +36,7 @@ export class OrganizationName extends ValueObject<OrganizationNameProps> {
 
     const maxLengthResult = Guard.againstAtMost(this.maxLength, props.name)
     if (!maxLengthResult.succeeded) {
-      return Result.fail<OrganizationName>(minLengthResult.message as string)
+      return Result.fail<OrganizationName>(maxLengthResult.message as string)
     }
 
     return Result.ok<OrganizationName>(new OrganizationName(props))

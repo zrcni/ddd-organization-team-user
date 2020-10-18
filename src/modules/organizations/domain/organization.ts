@@ -6,9 +6,18 @@ import { UniqueEntityID } from '../../../shared/domain/UniqueEntityID'
 import { Result } from '../../../shared/core/Result'
 import { Guard } from '../../../shared/core/Guard'
 import { AggregateRoot } from '../../../shared/domain/AggregateRoot'
+import { OrganizationMembers } from './organizationMembers'
+import { OrganizationMember } from './organizationMember'
+import { OrganizationMemberAdded } from './events/organizationMemberAdded'
+import { OrganizationMemberRemoved } from './events/teamMemberRemoved'
+import { OrganizationMaxTeams } from './organizationMaxTeams'
+import { OrganizationMaxTeamMembers } from './organizationMaxTeamMembers'
 
 interface OrganizationProps {
   name: OrganizationName
+  members: OrganizationMembers
+  maxTeams: OrganizationMaxTeams
+  maxTeamMembers: OrganizationMaxTeamMembers
   isDeleted?: boolean
 }
 
@@ -21,6 +30,18 @@ export class Organization extends AggregateRoot<OrganizationProps> {
     return this.props.name
   }
 
+  get maxTeams(): OrganizationMaxTeams {
+    return this.props.maxTeams
+  }
+
+  get maxTeamMembers(): OrganizationMaxTeamMembers {
+    return this.props.maxTeamMembers
+  }
+
+  get members(): OrganizationMembers {
+    return this.props.members
+  }
+
   get isDeleted(): boolean {
     return this.props.isDeleted as boolean
   }
@@ -29,6 +50,24 @@ export class Organization extends AggregateRoot<OrganizationProps> {
     if (!this.props.isDeleted) {
       this.addDomainEvent(new OrganizationDeleted(this))
       this.props.isDeleted = true
+    }
+  }
+
+  public addMember(organizationMember: OrganizationMember): void {
+    if (!this.props.members.exists(organizationMember)) {
+      this.props.members.add(organizationMember)
+      this.addDomainEvent(
+        new OrganizationMemberAdded(organizationMember, this.organizationId),
+      )
+    }
+  }
+
+  public removeMember(organizationMember: OrganizationMember): void {
+    if (this.props.members.exists(organizationMember)) {
+      this.props.members.remove(organizationMember)
+      this.addDomainEvent(
+        new OrganizationMemberRemoved(organizationMember, this.organizationId),
+      )
     }
   }
 
@@ -48,9 +87,23 @@ export class Organization extends AggregateRoot<OrganizationProps> {
       return Result.fail<Organization>(guardResult.message as string)
     }
 
+    const maxTeams = props.maxTeams
+      ? props.maxTeams
+      : OrganizationMaxTeams.create({
+          value: OrganizationMaxTeams.min,
+        }).getValue()
+
+    const maxTeamMembers = props.maxTeamMembers
+      ? props.maxTeamMembers
+      : OrganizationMaxTeamMembers.create({
+          value: OrganizationMaxTeamMembers.min,
+        }).getValue()
+
     const organization = new Organization(
       {
         ...props,
+        maxTeams,
+        maxTeamMembers,
         isDeleted: props.isDeleted ? props.isDeleted : false,
       },
       id,
