@@ -1,0 +1,31 @@
+version: '3.7'
+services:
+  mongodb-primary:
+    image: 'bitnami/mongodb:4.0.9'
+    environment:
+      - MONGODB_REPLICA_SET_MODE=primary
+      - MONGODB_REPLICA_SET_NAME=ddd_replica
+    ports:
+      - 27017:27017
+
+  mongodb-secondary:
+    image: 'bitnami/mongodb:4.0.9'
+    depends_on:
+      - mongodb-primary
+    environment:
+      - MONGODB_REPLICA_SET_MODE=secondary
+      - MONGODB_PRIMARY_HOST=localhost:27017
+      - MONGODB_PRIMARY_PORT_NUMBER=27017
+      - MONGODB_REPLICA_SET_NAME=ddd_replica
+    ports:
+      - 27016:27017
+
+  mongodb-arbiter:
+    image: 'bitnami/mongodb:4.0.9'
+    depends_on:
+      - mongodb-primary
+    environment:
+      - MONGODB_REPLICA_SET_MODE=arbiter
+      - MONGODB_PRIMARY_HOST=localhost:27017
+      - MONGODB_PRIMARY_PORT_NUMBER=27017
+      - MONGODB_REPLICA_SET_NAME=ddd_replica

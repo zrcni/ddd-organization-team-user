@@ -1,12 +1,12 @@
-import { TeamMember } from '../../../teams/domain/teamMember'
-import { Team } from '../../../teams/domain/team'
-import { Organization } from '../organization'
 import { Result, right, left } from '../../../../shared/core/Result'
-import { AddTeamMemberErrors } from '../../useCases/addTeamMember/AddTeamMemberErrors'
-import { AddTeamMemberResponse } from '../../useCases/addTeamMember/AddTeamMemberResponse'
 import { Guard } from '../../../../shared/core/Guard'
 import { User } from '../../../users/domain/user'
 import { TeamMemberRoles } from '../../../teams/domain/teamMemberRoles'
+import { Team } from '../../../teams/domain/team'
+import { Organization } from '../organization'
+import { AddTeamMemberResponse } from '../../../teams/useCases/addTeamMember/AddTeamMemberResponse'
+import { AddTeamMemberErrors } from '../../../teams/useCases/addTeamMember/AddTeamMemberErrors'
+import { TeamMember } from '../../../teams/domain/teamMember'
 
 export class OrganizationService {
   public addTeamMember(

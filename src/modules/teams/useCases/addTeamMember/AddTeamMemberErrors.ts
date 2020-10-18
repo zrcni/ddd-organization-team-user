@@ -21,9 +21,28 @@ export namespace AddTeamMemberErrors {
       )
     }
   }
+
   export class TeamMemberAlreadyExistsError extends Result<UseCaseError> {
     constructor() {
       super(false, `Team member already exists.`)
+    }
+  }
+
+  export class UserNotFoundError extends Result<UseCaseError> {
+    constructor() {
+      super(false, `User not found.`)
+    }
+  }
+
+  export class TeamNotFoundError extends Result<UseCaseError> {
+    constructor() {
+      super(false, `Team not found.`)
+    }
+  }
+
+  export class OrganizationNotFoundError extends Result<UseCaseError> {
+    constructor() {
+      super(false, `Organization not found.`)
     }
   }
 }

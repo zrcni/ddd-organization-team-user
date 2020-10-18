@@ -44,7 +44,10 @@ export class TeamMember extends Entity<TeamMemberProps> {
         roles,
       }
 
-      const teamMember = new TeamMember(defaultTeamMemberProps, props.userId.id)
+      const teamMember = new TeamMember(
+        defaultTeamMemberProps,
+        new UniqueEntityID(props.userId.id.toString()),
+      )
 
       return Result.ok<TeamMember>(teamMember)
     }
