@@ -1,6 +1,6 @@
-import { IUserRepo } from '../../../../../modules/users/repos/userRepo'
-import { User } from '../../../../../modules/users/domain/user'
-import { UserName } from '../../../../../modules/users/domain/userName'
+import { IUserRepo } from '../../../../modules/users/repos/userRepo'
+import { UserName } from '../../../../modules/users/domain/userName'
+import { User } from '../../../../modules/users/domain/user'
 
 export class DevDataGenerator {
   userRepo: IUserRepo

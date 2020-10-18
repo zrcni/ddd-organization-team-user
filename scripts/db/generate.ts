@@ -1,5 +1,5 @@
 import { userRepo } from '../../src/modules/users/repos'
-import { DevDataGenerator } from '../../src/shared/infra/database/mongoose/generators/DevDataGenerator'
+import { DevDataGenerator } from '../../src/shared/infra/database/generators/DevDataGenerator'
 ;(async () => {
   try {
     const generator = new DevDataGenerator(userRepo)
