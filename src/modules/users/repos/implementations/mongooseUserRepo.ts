@@ -28,7 +28,7 @@ export class MongooseUserRepo implements IUserRepo {
     if (!exists) {
       await this.model.create(rawUser)
     } else {
-      await this.model.updateOne({ _id: rawUser._id }, { $set: { rawUser } })
+      await this.model.updateOne({ _id: rawUser._id }, { $set: { rawUser } }).exec()
     }
   }
 }

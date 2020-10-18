@@ -28,7 +28,9 @@ export class MongooseTeamRepo implements ITeamRepo {
     if (!exists) {
       await this.model.create(rawTeam)
     } else {
-      await this.model.updateOne({ _id: rawTeam._id }, { $set: { rawTeam } })
+      await this.model
+        .updateOne({ _id: rawTeam._id }, { $set: { rawTeam } })
+        .exec()
     }
   }
 }
