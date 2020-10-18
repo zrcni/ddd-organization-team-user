@@ -2,6 +2,7 @@ import mongoose from 'mongoose'
 import { IUserRepo } from '../userRepo'
 import { User } from '../../domain/user'
 import { UserMap } from '../../mappers/userMap'
+import { UserName } from '../../domain/userName'
 const ObjectId = mongoose.Types.ObjectId
 
 export class MongooseUserRepo implements IUserRepo {
@@ -13,6 +14,16 @@ export class MongooseUserRepo implements IUserRepo {
 
   async exists(userId: string): Promise<boolean> {
     return this.model.exists({ _id: new ObjectId(userId) })
+  }
+
+  async getUserByUserName(username: UserName | string): Promise<User> {
+    const user = await this.model
+      .findOne({
+        username: username instanceof UserName ? username.value : username,
+      })
+      .exec()
+    if (!user) throw new Error('User not found')
+    return UserMap.toDomain(user)
   }
 
   async getUserByUserId(userId: string): Promise<User> {
@@ -28,7 +39,9 @@ export class MongooseUserRepo implements IUserRepo {
     if (!exists) {
       await this.model.create(rawUser)
     } else {
-      await this.model.updateOne({ _id: rawUser._id }, { $set: { rawUser } }).exec()
+      await this.model
+        .updateOne({ _id: rawUser._id }, { $set: { rawUser } })
+        .exec()
     }
   }
 }

@@ -1,8 +1,9 @@
-import uuid from 'uuid'
+import { Types } from 'mongoose'
 import { Identifier } from './Identifier'
+const ObjectId = Types.ObjectId
 
 export class UniqueEntityID extends Identifier<string | number> {
   constructor(id?: string | number) {
-    super(id ? id : uuid.v4())
+    super(id ? id : new ObjectId().toString())
   }
 }

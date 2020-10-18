@@ -11,6 +11,7 @@ interface UserProps {
   username: UserName
   isAdmin?: boolean
   isDeleted?: boolean
+  isNew?: boolean
 }
 
 export class User extends AggregateRoot<UserProps> {
@@ -28,6 +29,10 @@ export class User extends AggregateRoot<UserProps> {
 
   get isAdmin(): boolean {
     return this.props.isAdmin as boolean
+  }
+
+  get isNew(): boolean {
+    return this.props.isNew as boolean
   }
 
   public delete(): void {
@@ -50,12 +55,14 @@ export class User extends AggregateRoot<UserProps> {
       return Result.fail<User>(guardResult.message as any)
     }
 
-    const isNewUser = !!id === false
+    const isNewUser = !id
+
     const user = new User(
       {
         ...props,
         isDeleted: props.isDeleted ? props.isDeleted : false,
         isAdmin: props.isAdmin ? props.isAdmin : false,
+        isNew: isNewUser,
       },
       id,
     )
