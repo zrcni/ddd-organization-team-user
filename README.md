@@ -5,9 +5,9 @@ Domain objects, entities and value objects define the domain model. The domain a
 Use cases contain the operations in the domain. They would be called in API endpoint handlers, for example.
 
 [CreateUserUseCase](./src/modules/users/useCases/createUser/CreateUserUseCase.ts)   
-[CreateOrganizationUseCase](./src/modules/users/useCases/createOrganization/CreateOrganizationUseCase.ts)   
+[CreateOrganizationUseCase](./src/modules/organizations/useCases/createOrganization/CreateOrganizationUseCase.ts)   
 [CreateTeamUseCase](./src/modules/teams/useCases/createTeam/CreateTeamUseCase.ts)   
-[AddTeamMemberUseCase](./src/modules/users/useCases/addTeamMember/AddTeamMemberUseCase.ts)   
+[AddTeamMemberUseCase](./src/modules/teams/useCases/addTeamMember/AddTeamMemberUseCase.ts)   
 
 ## (domain) Services
 Operations that don't fit into domain objects could fit into a domain service.
